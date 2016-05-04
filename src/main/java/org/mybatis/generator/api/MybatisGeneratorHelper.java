@@ -3,8 +3,10 @@ package org.mybatis.generator.api;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.internal.NullProgressCallback;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,8 +15,8 @@ import java.util.Set;
  */
 public class MybatisGeneratorHelper {
 
-    private static Configuration GetConfiguration(JDBCConnectionConfiguration config, Set<String> tbs) {
-        if(!config.getProperties().containsKey("remarksReporting")){
+    private static Configuration GetConfiguration(JDBCConnectionConfiguration config, Set<String> tbs, String schema) {
+        if (!config.getProperties().containsKey("remarksReporting")) {
             config.getProperties().put("remarksReporting", "true");
         }
 
@@ -27,14 +29,16 @@ public class MybatisGeneratorHelper {
         for (String tb : tbs) {
             TableConfiguration tbCfg = new TableConfiguration(cxt);
             tbCfg.setTableName(tb);
+            tbCfg.setSchema(schema);
             cxt.getTableConfigurations().add(tbCfg);
         }
 
         return cfg;
     }
 
-    public static List<ColumnInfo> GetDbData(JDBCConnectionConfiguration config, Set<String> tbs) {
-        Configuration cfg = GetConfiguration(config, tbs);
+    public static List<ColumnInfo> GetDbData(JDBCConnectionConfiguration config, Set<String> tbs, String schema) {
+
+        Configuration cfg = GetConfiguration(config, tbs, schema);
 
         List<ColumnInfo> listCols = new ArrayList<ColumnInfo>();
 
@@ -43,16 +47,19 @@ public class MybatisGeneratorHelper {
 
             ProgressCallback callback = new NullProgressCallback();
 
-            cxt.introspectTables(callback, null, tbs);
+            cxt.introspectTables(callback, null, new HashSet<String>());
             List<IntrospectedTable> list = cxt.getIntrospectedTables();
 
             for (IntrospectedTable item : list) {
-                ColumnInfo info=new ColumnInfo();
-                info.setTableName(item.getTableConfiguration().getTableName());
+                ColumnInfo info = new ColumnInfo();
+                String table = item.getTableConfiguration().getTableName();
+                info.setTableName(table);
+                info.setSchema(schema);
+                info.setJavaTableProperty(JavaBeansUtil.getCamelCaseString(table, true));
 
-                List<ColumnInfo.Column> pkeyCols=getColumnInfoList(true,false, item.primaryKeyColumns);
-                List<ColumnInfo.Column> blobCols=getColumnInfoList(false,true, item.blobColumns);
-                List<ColumnInfo.Column> baseCols=getColumnInfoList(false,false, item.baseColumns);
+                List<ColumnInfo.Column> pkeyCols = getColumnInfoList(true, false, item.primaryKeyColumns);
+                List<ColumnInfo.Column> blobCols = getColumnInfoList(false, true, item.blobColumns);
+                List<ColumnInfo.Column> baseCols = getColumnInfoList(false, false, item.baseColumns);
                 info.getListColumn().addAll(pkeyCols);
                 info.getListColumn().addAll(blobCols);
                 info.getListColumn().addAll(baseCols);
@@ -66,8 +73,8 @@ public class MybatisGeneratorHelper {
         return listCols;
     }
 
-    private static List<ColumnInfo.Column>  getColumnInfoList(boolean isKey,boolean isBlob, List<IntrospectedColumn> list) {
-        List<ColumnInfo.Column> results=new ArrayList<ColumnInfo.Column>();
+    private static List<ColumnInfo.Column> getColumnInfoList(boolean isKey, boolean isBlob, List<IntrospectedColumn> list) {
+        List<ColumnInfo.Column> results = new ArrayList<ColumnInfo.Column>();
 
         for (IntrospectedColumn icol : list) {
             ColumnInfo.Column col = new ColumnInfo.Column();

@@ -24,6 +24,7 @@ import static org.mybatis.generator.internal.util.StringUtility.stringContainsSp
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
+import java.awt.*;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -503,7 +504,7 @@ public class DatabaseIntrospector {
                             localTableName, '.');
             logger.debug(getString("Tracing.1", fullTableName)); //$NON-NLS-1$
         }
-
+        //localSchema="LGHA";
         ResultSet rs = databaseMetaData.getColumns(localCatalog, localSchema,
                 localTableName, null);
 
@@ -519,6 +520,9 @@ public class DatabaseIntrospector {
                     .setNullable(rs.getInt("NULLABLE") == DatabaseMetaData.columnNullable); //$NON-NLS-1$
             introspectedColumn.setScale(rs.getInt("DECIMAL_DIGITS")); //$NON-NLS-1$
             introspectedColumn.setRemarks(rs.getString("REMARKS")); //$NON-NLS-1$
+
+            //warnings.add("DatabaseMetaData:"+databaseMetaData.getClass().getName()+"remark:"+introspectedColumn.getRemarks()+" localSchema:"+localSchema+"localCatalog:"+localCatalog+"localTableName:"+localTableName);
+
             introspectedColumn.setDefaultValue(rs.getString("COLUMN_DEF")); //$NON-NLS-1$
 
             ActualTableName atn = new ActualTableName(

@@ -14,14 +14,14 @@ public class TestMain {
             JDBCConnectionConfiguration cfg=new JDBCConnectionConfiguration();
             cfg.setConnectionURL("jdbc:oracle:thin:@10.6.144.162:1522:CCSP");
             cfg.setDriverClass("oracle.jdbc.driver.OracleDriver");
-            cfg.setPassword("cargo");
+            cfg.setPassword("c1d2s300");
             cfg.setUserId("cds");
 
-
+String schema="CDS";
             Set<String>  sets=new HashSet<String>();
             sets.add("C_CMS_3201");
 
-            MybatisGeneratorHelper.GetDbData(cfg,sets );
+            MybatisGeneratorHelper.GetDbData(cfg,sets,schema );
         } catch (Exception e) {
             e.printStackTrace();
         }

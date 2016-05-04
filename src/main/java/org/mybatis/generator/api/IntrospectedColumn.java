@@ -128,6 +128,8 @@ public class IntrospectedColumn {
         sb.append(scale);
         sb.append(", Identity: "); //$NON-NLS-1$
         sb.append(identity);
+        sb.append(", Remark: "); //$NON-NLS-1$
+        sb.append(remarks);
 
         return sb.toString();
     }

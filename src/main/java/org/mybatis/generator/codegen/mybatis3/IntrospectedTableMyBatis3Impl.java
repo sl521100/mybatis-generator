@@ -206,23 +206,45 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         return answer;
     }
 
-    @Override
-    public List<GeneratedXmlFile> getGeneratedXmlFiles() {
-        List<GeneratedXmlFile> answer = new ArrayList<GeneratedXmlFile>();
+//    @Override
+//    public List<GeneratedXmlFile> getGeneratedXmlFiles() {
+//        List<GeneratedXmlFile> answer = new ArrayList<GeneratedXmlFile>();
+//
+//        if (xmlMapperGenerator != null) {
+//            Document document = xmlMapperGenerator.getDocument();
+//            GeneratedXmlFile gxf = new GeneratedXmlFile(document,
+//                getMyBatis3XmlMapperFileName(), getMyBatis3XmlMapperPackage(),
+//                context.getSqlMapGeneratorConfiguration().getTargetProject(),
+//                true, context.getXmlFormatter());
+//            if (context.getPlugins().sqlMapGenerated(gxf, this)) {
+//                answer.add(gxf);
+//            }
+//        }
+//
+//        return answer;
+//    }
+@Override
+public List<GeneratedXmlFile> getGeneratedXmlFiles() {
+    List<GeneratedXmlFile> answer = new ArrayList<GeneratedXmlFile>();
 
-        if (xmlMapperGenerator != null) {
-            Document document = xmlMapperGenerator.getDocument();
-            GeneratedXmlFile gxf = new GeneratedXmlFile(document,
+    if (xmlMapperGenerator != null) {
+        Document document = xmlMapperGenerator.getDocument();
+        String tmp = context.getProperty("mergeable");
+        boolean mergeable = false;
+        if("true".equalsIgnoreCase(tmp)){
+            mergeable = true;
+        }
+        GeneratedXmlFile gxf = new GeneratedXmlFile(document,
                 getMyBatis3XmlMapperFileName(), getMyBatis3XmlMapperPackage(),
                 context.getSqlMapGeneratorConfiguration().getTargetProject(),
-                true, context.getXmlFormatter());
-            if (context.getPlugins().sqlMapGenerated(gxf, this)) {
-                answer.add(gxf);
-            }
+                mergeable, context.getXmlFormatter());
+        if (context.getPlugins().sqlMapGenerated(gxf, this)) {
+            answer.add(gxf);
         }
-
-        return answer;
     }
+
+    return answer;
+}
 
     @Override
     public int getGenerationSteps() {

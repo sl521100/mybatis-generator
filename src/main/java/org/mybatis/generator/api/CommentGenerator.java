@@ -30,7 +30,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  * 
  * @author Jeff Butler
  */
-public interface CommentGenerator {
+public interface  CommentGenerator {
 
     /**
      * Adds properties for this instance from any properties configured in the

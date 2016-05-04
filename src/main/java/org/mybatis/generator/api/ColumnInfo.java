@@ -8,7 +8,9 @@ import java.util.List;
  */
 public class ColumnInfo {
 
+    private String schema;
     private String tableName;
+    private  String javaTableProperty;
     private List<Column> listColumn;
 
     public ColumnInfo(){
@@ -27,7 +29,44 @@ public class ColumnInfo {
         return listColumn;
     }
 
+    public String getSchema() {
+        return schema;
+    }
 
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
+    public String getJavaTableProperty() {
+        return javaTableProperty;
+    }
+
+    public void setJavaTableProperty(String javaTableProperty) {
+        this.javaTableProperty = javaTableProperty;
+    }
+
+    public String getDbColumnsStr(){
+        String result="";
+        StringBuffer sb=new StringBuffer();
+        for (Column item : listColumn) {
+            sb.append(item.getDbColumnName()+",");
+        }
+        if(sb.length()>0){
+            result=sb.deleteCharAt(sb.length()-1).toString();
+        }else {
+            result = sb.toString();
+        }
+        return result;
+    }
+    public List<Column> getPkeyColumn(){
+        List<Column> list=new ArrayList<Column>();
+        for (Column item : listColumn) {
+            if(item.isPKey()){
+                list.add(item);
+            }
+        }
+        return list;
+    }
     public static class Column{
         private boolean isPKey;
         private boolean isBlob;

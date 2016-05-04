@@ -51,6 +51,10 @@ public class ConnectionFactory {
 
     public Connection getConnection(JDBCConnectionConfiguration config)
             throws SQLException {
+        if (!config.getProperties().containsKey("remarksReporting")) {
+            config.getProperties().put("remarksReporting", "true");
+        }
+
         Driver driver = getDriver(config);
 
         Properties props = new Properties();

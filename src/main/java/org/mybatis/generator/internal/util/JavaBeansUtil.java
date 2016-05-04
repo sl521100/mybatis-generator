@@ -89,7 +89,8 @@ public class JavaBeansUtil {
         return sb.toString();
     }
 
-    public static String getCamelCaseString(String inputString,
+    public static String
+    getCamelCaseString(String inputString,
             boolean firstCharacterUppercase) {
         StringBuilder sb = new StringBuilder();
 
