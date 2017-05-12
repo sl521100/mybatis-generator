@@ -19,11 +19,21 @@ public class MybatisGeneratorHelper {
         if (!config.getProperties().containsKey("remarksReporting")) {
             config.getProperties().put("remarksReporting", "true");
         }
+        if (!config.getProperties().containsKey("useInformationSchema")) {
+            config.getProperties().put("useInformationSchema","true");
+        }
+        if (!config.getProperties().containsKey("remarks")) {
+            config.getProperties().put("remarks", "true");
+        }
 
         Configuration cfg = new Configuration();
         Context cxt = new Context(ModelType.CONDITIONAL);
         cxt.setId("my");
         cfg.getContexts().add(cxt);
+
+        if (config.getAutoDelimitKeywords()!=null &&config.getAutoDelimitKeywords().booleanValue()) {
+            cxt.addProperty(PropertyRegistry.CONTEXT_AUTO_DELIMIT_KEYWORDS,"true");
+        }
 
         cxt.setJdbcConnectionConfiguration(config);
         for (String tb : tbs) {
@@ -89,6 +99,12 @@ public class MybatisGeneratorHelper {
             col.setRemarks(icol.getRemarks());
             col.setScale(icol.getScale());
 
+            col.setHasColumnNameDelimited(icol.isColumnNameDelimited());
+            if(icol.isColumnNameDelimited()){
+                col.setDbColumnNameDelimitkey("\""+ col.getDbColumnName()+"\"");
+            }else{
+                col.setDbColumnNameDelimitkey( col.getDbColumnName());
+            }
             results.add(col);
         }
         return results;

@@ -37,6 +37,16 @@ public class JDBCConnectionConfiguration extends PropertyHolder {
 
     private String password;
 
+    private Boolean autoDelimitKeywords;
+
+    public Boolean getAutoDelimitKeywords() {
+        return autoDelimitKeywords;
+    }
+
+    public void setAutoDelimitKeywords(Boolean autoDelimitKeywords) {
+        this.autoDelimitKeywords = autoDelimitKeywords;
+    }
+
     public JDBCConnectionConfiguration() {
         super();
     }
