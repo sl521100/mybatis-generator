@@ -509,6 +509,7 @@ public class DatabaseIntrospector {
                 localTableName, null);
 
         while (rs.next()) {
+
             IntrospectedColumn introspectedColumn = ObjectFactory
                     .createIntrospectedColumn(context);
 

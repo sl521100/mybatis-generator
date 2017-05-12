@@ -1,5 +1,8 @@
 package org.mybatis.generator.api;
 
+import org.apache.tools.ant.util.StringUtils;
+import org.mybatis.generator.internal.util.StringUtility;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +61,19 @@ public class ColumnInfo {
         }
         return result;
     }
+    public String getDbColumnsDelimitKeyStr(){
+        String result="";
+        StringBuffer sb=new StringBuffer();
+        for (Column item : listColumn) {
+            sb.append(item.getDbColumnNameDelimitkey()+",");
+        }
+        if(sb.length()>0){
+            result=sb.deleteCharAt(sb.length()-1).toString();
+        }else {
+            result = sb.toString();
+        }
+        return result;
+    }
     public List<Column> getPkeyColumn(){
         List<Column> list=new ArrayList<Column>();
         for (Column item : listColumn) {
@@ -75,9 +91,35 @@ public class ColumnInfo {
         private String dbType;
         private String javaProperty;
         private String javaType;
+        private String s_javaType;
         private String remarks;
         private int length;
         private int scale;
+        private boolean hasColumnNameDelimited;
+        private String dbColumnNameDelimitkey;
+
+        public String getDbColumnNameDelimitkey() {
+            return dbColumnNameDelimitkey;
+        }
+
+        public void setDbColumnNameDelimitkey(String dbColumnNameDelimitkey) {
+            this.dbColumnNameDelimitkey = dbColumnNameDelimitkey;
+        }
+
+        public boolean isHasColumnNameDelimited() {
+            return hasColumnNameDelimited;
+        }
+
+        public void setHasColumnNameDelimited(boolean hasColumnNameDelimited) {
+            this.hasColumnNameDelimited = hasColumnNameDelimited;
+        }
+
+        public String getS_javaType() {
+            if(javaType!=null&& !javaType.equals("") && javaType.contains(".")){
+               return javaType.substring( javaType.lastIndexOf(".")+1);
+            }
+            return javaType;
+        }
 
         public boolean isPKey() {
             return isPKey;

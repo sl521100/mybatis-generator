@@ -54,6 +54,13 @@ public class ConnectionFactory {
         if (!config.getProperties().containsKey("remarksReporting")) {
             config.getProperties().put("remarksReporting", "true");
         }
+        if (!config.getProperties().containsKey("useInformationSchema")) {
+            config.getProperties().put("useInformationSchema","true");
+        }
+        if (!config.getProperties().containsKey("remarks")) {
+            config.getProperties().put("remarks", "true");
+        }
+
 
         Driver driver = getDriver(config);
 
